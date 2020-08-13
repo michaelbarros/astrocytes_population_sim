@@ -6,41 +6,10 @@
 ##
 ##Author: Michael Taynnan Barros (michael.taob@gmail.com)
 ##
-##				New features: ASTROCYTES.
-##
 ##
 ##This software is part of the author's Ph.D. and it is exclusively made for research purposes.
 ##The use of such software should be authorized by its author.
 ##
-##We used Guillespie exact stochastic method alongside with the mininal model for calcium wave oscillation.
-##If the user wants further knowledge about the simulation, please consider the following references.
-##
-##[1] T. Nakano and J.-Q. Liu, �Design and analysis of molecular relay
-##channels: An information theoretic approach,� IEEE Transactions on
-##NanoBioscience, vol. 9, pp. 213�221, 2010.
-##
-##[2] A. Goldbeter, G. Dupont, and M. J. Berridge, �Minimal model for signalinduced
-##Ca2+ oscillations and for their frequency encoding through
-##protein phosphorylation,� Proceedings of the National Academy of
-##Science USA, vol. 87, pp. 1461�1465, 1990.
-##
-##[3] D. T. Gillespie, �Exact stochastic simulation of coupled chemical
-##reactions,� Journal of Physical Chemistry, vol. 81, no. 25, pp. 2340�
-##2361, 1977.
-##
-##[4] M. T. Barros, S. Balasubramaniam, B. Jennings, and Y. Koucheryavy,
-##�Transmission protocols for calcium signaling based molecular communications
-##in deformable cellular tissues,� Manuscript sumbitted for
-##journal publication, 2014.
-##
-##[5] M. T. Barros, S. Balasubramaniam, and B. Jennings, �Error control for
-##calcium signaling based molecular communications,� in 47th Annual
-##Asilomar Conference on Signals, Systems, and Computers, 2013.
-##
-##[6] M. T. Barros, S. Balasubramaniam, and B. Jennings, �Integrating information
-##metrics and molecular communications for inferencing and
-##detecting cellular tissue deformation,� Manuscript sumbitted for journal
-##publication, 2014.
 ##
 ###########################################################################################################################################
 ###########################################################################################################################################
