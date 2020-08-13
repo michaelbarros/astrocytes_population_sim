@@ -6,7 +6,7 @@ This is the code of the paper "Engineering Molecular Communications of Astrocyte
 ## How to use it
 
 You may run the code with initial configuration
-- python <filename>
+- python astrocytes_population_sim.py
   
 Alternatevely, the code supports the pypy interpreter, therefore use
-- pypy <filename>
+- pypy astrocytes_population_sim.py
