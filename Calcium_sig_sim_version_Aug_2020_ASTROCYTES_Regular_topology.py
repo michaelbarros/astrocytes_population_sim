@@ -109,7 +109,7 @@ class Model:
         self.time=tvec
         self.series=self.res
 
-        return tau,event, pv2
+        return tau,event, pv2 # tau is the amount of time spent in a chosen reaction, event is the rection, pv2 is the vector of propensities
 
     def GSSA(self, tmax=50, round=0):
         '''
@@ -152,7 +152,7 @@ class Model:
             print 'Release: ', pv[400]
             print 'RXACT: ', pv[416]
             print 'RXINACT', pv[417]
-        return tau, event, pv
+        return tau, event, pv # tau is the amount of time spent in a chosen reaction, event is the rection, pv is the vector of propensities
 
     def roulette(self, popsel, popnumber):
         limite = popnumber*random()
@@ -170,18 +170,18 @@ class Model:
 
 def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
     print '###############################################################'
-    print 'Simulation of: 1) Distance from the Tx:', destination,'# of cells'
+    print 'Simulation of: 1) Distance between Tx and Rx:', destination,'# of cells (1-9)'
     print '2) Transmitter Concentration:', txconc,'nM' 
-    print '3) Discrete 3D Tissue Size:', n, m
+    print '3) Discrete 3D Tissue Size:', n, m 'z axis is always 3'
     print '4) Length of the cell:', x/10,'uM'
     print '###############################################################'
 
     ##################################################################################
     ##Variable Initialization
-    ##################################################################################
+    #################################################################################
 
     #### Probability of gap junction values astrocytes
-
+	## phl - probability of having high and low conducate - open-close state = closed gap junction
     phl = [0.333333333333,0.0951756626745,0.0271812917035,0.00776661124715,0.00222288659849,0.000639921679991,0.000187410416804,5.81750667195e-05
     ,2.17596143238e-05,1.1436923158e-05,7.88454209682e-06,7.43738619183e-06,7.37970057786e-06,7.29603316347e-06,7.27478942971e-06,7.26006289992e-06
     ,7.26084787208e-06,7.26080132601e-06,7.26061054996e-06,7.26081361742e-06,7.26079620991e-06,7.26072365567e-06,7.26058079345e-06,7.26074725419e-06
@@ -189,14 +189,14 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
     ,7.26084014577e-06,7.2610063969e-06,7.26069065682e-06,7.26083092741e-06,7.26076153595e-06,7.26071756287e-06,7.26092535023e-06,7.26076421324e-06
     ,7.26060026219e-06,7.26075209967e-06,7.26093367537e-06,7.26073986493e-06,7.26039032094e-06,7.26091299989e-06,7.26077756319e-06,7.26071491915e-06
     ,7.2607710224e-06,7.26082337127e-06]
-
+	## phl - probability of having low and high conducate - close-open state = closed gap junction
     plh = [0.333333333333,0.706523083189,0.825908352326,0.86117728508,0.871356970354,0.874272895353,0.875107602476,0.875346523333,0.875414979813
     ,0.875433066086,0.875439533589,0.875437420808,0.875439605921,0.875443525702,0.875437685437,0.875440602592,0.875441218644,0.875440938251
     ,0.875438148928,0.875441400815,0.875441147657,0.875440025483,0.875437801975,0.875440355641,0.875442338151,0.875440081279,0.87543825197
     ,0.875440285023,0.87544449347,0.875441466845,0.875442967173,0.875437765288,0.875441782611,0.875444355802,0.875439468868,0.875441639938
     ,0.875440565916,0.875439885313,0.875443101387,0.875440607355,0.875438069767,0.875440419864,0.875443230241,0.875440230498,0.875434820356
     ,0.875442910232,0.875440813981,0.875439844395,0.875440712745,0.875441522986]
-
+	## phl - probability of having high and high conducate - open-open state = open gap junction
     phh = [0.333333333333,0.198301254137,0.14691035597,0.131056103673,0.126420143048,0.125087182967,0.124704987107,0.1245953016,0.124563260573
     ,0.124555496991,0.124552581869,0.124555141806,0.124553014379,0.124549178265,0.124555039774,0.124552137345,0.124551520508,0.124551800947
     ,0.124554590462,0.124551338371,0.124551591547,0.124552713793,0.124554937445,0.124552383612,0.124550400973,0.124552657991,0.124554487418
@@ -204,40 +204,47 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
     ,0.124552173322,0.124552853969,0.124549637687,0.124552131881,0.124554669633,0.124552319384,0.124549508825,0.124552508762,0.124557919254
     ,0.124549828855,0.124551925241,0.12455289489,0.124552026484,0.124551216191]
 
-    D = 122500
-    l = 0.5
-    space = 10
-    laticeset = [0] * int(space/l) * n * m
-    t = 0
-    #tEnd = 4  # Total runtime
-    tini = 0
-    tend = 2
-    C = []
-    C2 = []
-    T = []
-    numberofrec = 29
-    numberofvar = 30
+	#### NOTE: all values were obtained from another code, this is an ISSUE
+
+    D = 122500 # diffusion coefficient (adapted) - media is the intracellular astrocyte 
+    l = 0.5 # space of each lattive in micro meters
+    space = 10 # variable to define the amount of cells (depricated?)
+    laticeset = [0] * int(space/l) * n * m #calculate my lattice space
+    t = 0 # initialize time variable (simulation time)
+    #tEnd = 4  # Total runtime (depricated)
+    tini = 0 # represents transmission time (transmit my bits)
+    tend = 2 # represents ends of transmission time
+    C = [] # variable to monitor the calcium concentration in Tx
+    C2 = [] # variable to monitor the calcium concentration in Rx
+    T = [] # will monitor time (guillespie we calculate time per reaction)
+    numberofrec = 29 # number of reactions per cell
+    numberofvar = 30 # number of variables per cell
+	## vector of values per variable per cell
     ini = [100,0,0.05,15,0.1,2.02,0.1,4000,50,1.5,50,0.3,8,0.05,0.15,0.15,0.1,0.1,4,0,0,0.5,D,(3.1416*((float(x)/2.0)**2)),0.0006,2.5,2.2,phh[0],phl[0],plh[0]] * int(space/l) * n * m
+	## vector with the names of each variable - mathematical name in the research paper
+	## the number before each variable name is a visual cue to its position in the vector
     vsars = ['0v1','1Y','2vin','3VM2','4C','5n','6K2','7VM3','8kout','9S','10kf','11kp','12kdeg','13vp','14kcaaa','15kcai','16kip3','17Z'
     ,'18q','19W','20A','21kia','22D','23l','24K','25ka','26m','27phh','28phl','29plh'] * int(space/l) * n * m
-    prop = []
-    freq = [0]*(numberofrec)
-    freq2 = [0]*int(space/l) * n * m
-    ALPHA = 0.01
-    q = 4
-    f=0
-    states=0
-    stater=1
-    liststates=[]
-    liststater=[]
-    ini[(len(laticeset)/2)*numberofvar+1]=txconc
-    ini[(len(laticeset)/2)*numberofvar+4]=deltaamp
-    dest = destination
-    ini[(len(laticeset)/2+dest)*numberofvar+19]=conc
-    destinationid = (len(laticeset)/2+dest)*numberofvar+4
-    listdiffTx = [0]*4
-    listdiffRx = [0]*4
-    debug='n'
+    prop = [] # a vector of propensities (chemical reaction)
+    freq = [0]*(numberofrec) # this monitors the occurence of each reaction in the Tx
+    freq2 = [0]*int(space/l) * n * m # this monitors the occurence of each reaction accross the tissue (I am not sure I use it here)
+    ALPHA = 0.01 # This is a constant for rate of change for each chemical concentration
+    q = 4 # is a constant
+    f=0 
+    states=0 # this is the state of the Tx (0 means not transmitting, 1 means transmitting)
+    stater=1 # this is the state of the Rx (0 means not receiving, 1 means receiving)
+    liststates=[] # monitors the states of the Tx
+    liststater=[] # monitors the states of the Rx
+    ini[(len(laticeset)/2)*numberofvar+1]=txconc # This is the concentration change in the Tx that enables transmission
+    ini[(len(laticeset)/2)*numberofvar+4]=deltaamp # This is the amplification of the Tx signal
+    dest = destination # dumb copy
+    ini[(len(laticeset)/2+dest)*numberofvar+19]=conc # this allows that the receiver starts receives (activate certain amount of calcium receptors with conc amount)
+    destinationid = (len(laticeset)/2+dest)*numberofvar+4 # this calculates the postition of the destination
+    listdiffTx = [0]*4 # monitors the diffusion reactions for the Tx
+    listdiffRx = [0]*4 # monitors the diffution reactions for the Rx
+    debug='n' # degub flag
+
+	## don't care about the rest for now
     p=[]
     p2=[]
     p4=[]
@@ -434,14 +441,20 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
     sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
     sys.stdout.flush()
 
+	## this is where the simulations starts
     while t <= tEnd:
 
+	  # this two variables sets up the guillespie algorithm  
         r = [.001,.1]
         tm = 2
-
+	  # this creates an object of the guillespie simulation
         M = Model(vnames = vars,rates = r,inits=ini, tmat=tm,propensity=prop,debug=debug)
+	    #getting the results of the simulation
         tau,event,pv = M.run(tmax=200,reps=1)
-        t = t + tau*1000
+	    
+        t = t + tau*1000 # updating the simulation time based on new tau value
+
+	    # underneath is a process to convert the simulation output to the position of the reaction in a cell
         reaction = event
         i=reaction/numberofrec
         x=(reaction-(reaction/numberofrec)*numberofrec)+1
@@ -471,7 +484,7 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
 
             itme = 0
 
-            ##update phh, phl and plh
+            ##update phh, phl and plh (gap junctions)
             for tant in xrange(0,len(ini),numberofvar):
 				if int(t) < len(phh):
 					ini[tant+27] = phh[int(t)]
@@ -618,7 +631,7 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
             if i == len(laticeset)/2+dest:
                 listdiffRx[2] = listdiffRx[3]+1
 
-
+	# from here below is about monitoring variables and calculating reults
         freq[x-1]= freq[x-1] + 1
 
         C.append(ini[(len(laticeset)/2+dest)*numberofvar+4])
