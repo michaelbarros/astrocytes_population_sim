@@ -278,7 +278,7 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
     ##################################################################################
     ## Initialization of reaction functions
     ##################################################################################
-
+		## python 3 should be // not /
     for tant in xrange(0,len(ini),numberofvar):
         # reactions
         propextend([lambda ini,i:ini[(i/numberofrec)*numberofvar+0]*ini[(i/numberofrec)*numberofvar+1]
