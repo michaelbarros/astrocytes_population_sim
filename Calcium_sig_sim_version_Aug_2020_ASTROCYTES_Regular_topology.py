@@ -272,6 +272,7 @@ def main(destination, conc, n, m, x, txconc, deltaamp, tEnd):
     ## Initialization of reaction functions
     ##################################################################################
 
+	#####  in python 3 the division is not / but //
     for tant in xrange(0,len(ini),numberofvar):
         # reactions
         propextend([lambda ini,i:ini[(i/numberofrec)*numberofvar+0]*ini[(i/numberofrec)*numberofvar+1]
